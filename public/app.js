@@ -4,6 +4,7 @@ let gameActive = true;
 
 const boxes = document.querySelectorAll('.btn');
 const resultText = document.querySelector('.result');
+const resetButton = document.querySelector('.reset-btn'); // Add reset button element
 
 function handleMove(index) {
     if (gameBoard[index] === '' && gameActive) {
@@ -14,9 +15,11 @@ function handleMove(index) {
         if (checkWin() === currentPlayer) {
             resultText.textContent = `Player ${currentPlayer} wins!`;
             gameActive = false;
+            enableResetButton(); // Enable reset button
         } else if (!gameBoard.includes('')) {
             resultText.textContent = "It's a draw!";
             gameActive = false;
+            enableResetButton(); // Enable reset button
         } else {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
             resultText.textContent = `Player ${currentPlayer}'s Turn`;
@@ -41,6 +44,10 @@ function checkWin() {
     return null;
 }
 
+function enableResetButton() {
+    resetButton.disabled = false;
+}
+
 function resetGame() {
     gameBoard = ['', '', '', '', '', '', '', '', ''];
     gameActive = true;
@@ -50,6 +57,7 @@ function resetGame() {
         box.disabled = false;
     });
     resultText.textContent = `Player ${currentPlayer}'s Turn`;
+    resetButton.disabled = true; // Disable the reset button initially
 }
 
 boxes.forEach((box, index) => {
@@ -58,4 +66,8 @@ boxes.forEach((box, index) => {
     });
 });
 
-resultText.textContent = `Player ${currentPlayer}'s Turn`;
+resetButton.addEventListener('click', () => {
+    resetGame();
+});
+
+resetGame();
