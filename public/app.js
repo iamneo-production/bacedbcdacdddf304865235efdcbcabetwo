@@ -1,67 +1,56 @@
-// Initial game state
-let cells = ['', '', '', '', '', '', '', '', ''];
+// JavaScript code for the Tic Tac Toe game
+const cells = document.querySelectorAll('.bt');
+const resultText = document.querySelector('.result-text');
+const resetButton = document.getElementById('reset-button');
 let currentPlayer = 'X';
-let result = document.querySelector('.result');
-let btns = document.querySelectorAll('.btn');
-let conditions = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
+let gameBoard = ['', '', '', '', '', '', '', '', ''];
+let gameActive = true;
+
+const winningCombinations = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
 ];
 
-// Function to handle player moves
-const ticTacToe = (element, index) => {
-    // Check if the cell is empty and the game is still ongoing
-    if (cells[index] === '' && result.textContent.startsWith('Player')) {
-        // Update the cell with the current player's symbol
-        cells[index] = currentPlayer;
-        element.textContent = currentPlayer;
-
-        // Check for winning conditions
-        for (const condition of conditions) {
-            const [a, b, c] = condition;
-            if (cells[a] === currentPlayer && cells[b] === currentPlayer && cells[c] === currentPlayer) {
-                // Display a winning message and disable all buttons
-                result.textContent = `Player ${currentPlayer} wins!`;
-                btns.forEach(btn => btn.disabled = true);
-                return;
-            }
+const checkWinner = () => {
+    for (let combo of winningCombinations) {
+        const [a, b, c] = combo;
+        if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+            resultText.textContent = `Player ${gameBoard[a]} wins!`;
+            gameActive = false;
+            resetButton.disabled = false;
         }
+    }
 
-        // Check for a draw (all cells are filled)
-        if (cells.every(cell => cell !== '')) {
-            result.textContent = "It's a draw!";
-        } else {
-            // Switch to the other player's turn
+    if (!gameBoard.includes('') && gameActive) {
+        resultText.textContent = "It's a draw!";
+        resetButton.disabled = false;
+    }
+};
+
+const handleClick = (cell, index) => {
+    if (gameBoard[index] === '' && gameActive) {
+        cell.value = currentPlayer;
+        gameBoard[index] = currentPlayer;
+        checkWinner();
+        if (gameActive) {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            result.textContent = `Player ${currentPlayer}'s turn`;
+            resultText.textContent = `Player ${currentPlayer}'s turn`;
         }
     }
 };
 
-// Function to reset the game
-const resetGame = () => {
-    // Reset the game state
-    cells = ['', '', '', '', '', '', '', '', ''];
-    currentPlayer = 'X';
-
-    // Clear the ~cell buttons and re-enable them
-    btns.forEach(btn => {
-        btn.textContent = '';
-        btn.disabled = false;
-    });
-
-    // Update the result message
-    result.textContent = "Player X's turn";
-};
-
-btns.forEach((btn, i) => {
-    btn.addEventListener('click', () => ticTacToe(btn, i));
+cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => handleClick(cell, index));
 });
 
-document.querySelector('#reset').addEventListener('click', resetGame);
+resetButton.addEventListener('click', () => {
+    cells.forEach((cell, index) => {
+        cell.value = '';
+        gameBoard[index] = '';
+    });
+    currentPlayer = 'X';
+    resultText.textContent = `Player ${currentPlayer}'s turn`;
+    resetButton.disabled = true;
+    gameActive = true;
+})
