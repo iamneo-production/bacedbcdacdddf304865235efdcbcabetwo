@@ -1,162 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Tic Tac Toe</title>
-    <style>
-        /* Header Styling */
-        header {
-            text-align: center;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-size: 50px;
-        }
-
-        /* Box Styling */
-        .box {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 35px;
-        }
-
-        /* Row Styling */
-        .row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Button Styling */
-        .bt {
-            border: 2px solid #000;
-            border-radius: 10px;
-            width: 75px;
-            height: 75px;
-            font-size: 50px;
-            font-weight: 500;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.7);
-            color: #000;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-        }
-
-        /* Button Hover Styling */
-        .bt:hover {
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Disabled Button Styling */
-        .bt:disabled {
-            color: #000;
-            cursor: no-drop;
-        }
-
-        /* Result Container Styling */
-        .result-container {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 2px solid #000;
-            max-width: 200px;
-            text-align: center;
-            margin: 20px auto;
-            padding: 10px; /* Added padding for spacing */
-        }
-
-        /* Result Styling */
-        .result {
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            font-size: 25px;
-            margin: 0; /* Removed margin to center text vertically */
-        }
-
-        /* Reset Button Styling */
-        #reset-button {
-            border: 2px solid #000;
-            border-radius: 10px;
-            width: 150px; /* Adjusted width for better appearance */
-            height: 50px; /* Adjusted height for better appearance */
-            font-size: 25px;
-            font-weight: 500;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.7);
-            color: #000;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        /* Reset Button Hover Styling */
-        #reset-button:hover {
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <h1>Tic Tac Toe</h1>
-    </header>
+    <h1 class="header">Tic Tac Toe</h1>
     <div class="box">
         <div class="row">
-            <input type="text" class="bt" readonly>
-            <input type="text" class="bt" readonly>
-            <input type="text" class="bt" readonly>
+            <input class="btn" type="text" readonly>
+            <input class="btn" type="text" readonly>
+            <input class="btn" type="text" readonly>
         </div>
         <div class="row">
-            <input type="text" class="bt" readonly>
-            <input type="text" class="bt" readonly>
-            <input type="text" class="bt" readonly>
+            <input class="btn" type="text" readonly>
+            <input class="btn" type="text" readonly>
+            <input class="btn" type="text" readonly>
         </div>
         <div class="row">
-            <input type="text" class="bt" readonly>
-            <input type="text" class="bt" readonly>
-            <input type="text" class="bt" readonly>
+            <input class="btn" type="text" readonly>
+            <input class="btn" type="text" readonly>
+            <input class="btn" type="text" readonly>
         </div>
     </div>
     <div class="result-container">
-        <p class="result">Player X's turn</p>
+        <p class="result">Player X's Turn</p>
     </div>
-    <button id="reset-button" onclick="resetGame()">Reset</button>
-
-    <script>
-        // JavaScript code for Tic Tac Toe game logic
-        let currentPlayer = 'X';
-        let isGameActive = true;
-
-        // Function to handle player moves
-        function handleMove(element) {
-            if (element.value === '' && isGameActive) {
-                element.value = currentPlayer;
-                element.disabled = true;
-                togglePlayer();
-                checkWin();
-            }
-        }
-
-        // Function to toggle between X and O
-        function togglePlayer() {
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            document.querySelector('.result').textContent = `Player ${currentPlayer}'s turn`;
-        }
-
-        // Function to check for a winning condition
-        function checkWin() {
-            // Implement your winning condition logic here
-        }
-
-        // Function to reset the game
-        function resetGame() {
-            const buttons = document.querySelectorAll('.bt');
-            buttons.forEach(button => {
-                button.value = '';
-                button.disabled = false;
-            });
-            currentPlayer = 'X';
-            isGameActive = true;
-            document.querySelector('.result').textContent = `Player ${currentPlayer}'s turn`;
-        }
-    </script>
+    <div class="reset-section">
+        <button class="reset-btn" onclick="resetGame()">Reset</button>
+    </div>
+    <script src="app.js"></script>
 </body>
-</html
+</html>
