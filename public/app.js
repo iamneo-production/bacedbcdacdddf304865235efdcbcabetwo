@@ -1,57 +1,75 @@
+// Initial game state
+let cells = ['', '', '', '', '', '', '', '', ''];
 let currentPlayer = 'X';
-const cells = document.querySelectorAll('.btn');
-const resultDisplay = document.getElementById('result');
-let gameActive = true;
+let result = document.querySelector('.result');
+let btns = document.querySelectorAll('.btn');
+let conditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
 
-// Function to check for a win
-function checkWin() {
-    const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-        [0, 4, 8], [2, 4, 6] // Diagonals
-    ];
+// Function to handle player moves
+const ticTacToe = (element, index) => {
+    // Check if the cell is empty and the game is still active
+    if (cells[index] === '' && !result.textContent.includes('wins')) {
+        // Update the cell with the current player's symbol
+        cells[index] = currentPlayer;
+        element.textContent = currentPlayer;
 
-    for (const pattern of winPatterns) {
-        const [a, b, c] = pattern;
-        if (cells[a].textContent && cells[a].textContent === cells[b].textContent && cells[a].textContent === cells[c].textContent) {
-            return true;
+        // Check for winning conditions
+        for (const condition of conditions) {
+            const [a, b, c] = condition;
+            if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+                result.textContent = `Player ${currentPlayer} wins!`;
+                disableButtons();
+                return;
+            }
         }
-    }
-    return false;
-}
 
-// Function to handle cell click
-function handleCellClick(event) {
-    const cell = event.target;
-
-    // Check if the cell is empty and the game is still ongoing
-    if (cell.textContent === '' && gameActive) {
-        cell.textContent = currentPlayer;
-
-        // Check for a win
-        if (checkWin()) {
-            resultDisplay.textContent = `Player ${currentPlayer} wins!`;
-            gameActive = false;
-        } else if ([...cells].every(cell => cell.textContent)) {
-            resultDisplay.textContent = "It's a draw!";
-            gameActive = false;
-        } else {
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            resultDisplay.textContent = `Player ${currentPlayer}'s turn`;
+        // Check for a draw
+        if (!cells.includes('')) {
+            result.textContent = "It's a draw!";
+            disableButtons();
+            return;
         }
+
+        // Switch to the next player
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        result.textContent = `Player ${currentPlayer}'s turn`;
     }
-}
+};
+
+// Function to disable buttons after a win or draw
+const disableButtons = () => {
+    btns.forEach((btn) => {
+        btn.disabled = true;
+    });
+};
 
 // Function to reset the game
-function resetGame() {
-    cells.forEach(cell => cell.textContent = '');
+const resetGame = () => {
+    // Reset game state
+    cells = ['', '', '', '', '', '', '', '', ''];
     currentPlayer = 'X';
-    resultDisplay.textContent = "Player X's turn";
-    gameActive = true;
-}
 
-// Add click event listeners to cells
-cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+    // Clear the result text
+    result.textContent = `Player ${currentPlayer}'s turn`;
 
-// Add click event listener to reset button
-document.getElementById('reset-button').addEventListener('click', resetGame);
+    // Enable buttons
+    btns.forEach((btn) => {
+        btn.textContent = '';
+        btn.disabled = false;
+    });
+};
+
+btns.forEach((btn, i) => {
+    btn.addEventListener('click', () => ticTacToe(btn, i));
+});
+
+document.querySelector('#reset').addEventListener('click', resetGame);
